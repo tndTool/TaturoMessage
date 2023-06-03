@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { BsPersonPlusFill } from 'react-icons/bs';
 
 import Avatar from '@/app/components/Avatar';
 import LoadingModal from '@/app/components/LoadingModal';
@@ -55,6 +56,9 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
                         </div>
                     </div>
                 </div>
+                <span className="flex items-center space-x-1">
+                    <BsPersonPlusFill className="text-gray-900 hover:text-gray-700" />
+                </span>
             </div>
         </>
     );
