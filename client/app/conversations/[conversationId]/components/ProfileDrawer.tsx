@@ -9,6 +9,8 @@ import { Transition, Dialog } from '@headlessui/react';
 
 import ConfirmModal from './ConfirmModal';
 import Avatar from '@/app/components/Avatar';
+import AvatarGroup from '@/app/components/AvatarGroup';
+import useActiveList from '@/app/hooks/useActiveList';
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -21,6 +23,9 @@ interface ProfileDrawerProps {
 const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) => {
     const otherUser = useOtherUser(data);
     const [confirmOpen, setConfirmOpen] = useState(false);
+
+    const { members } = useActiveList();
+    const isActive = members.indexOf(otherUser?.email!) !== -1;
 
     const joinedDate = useMemo(() => {
         return format(new Date(otherUser.createAt), 'PP');
@@ -35,8 +40,8 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
             return `${data.users.length} members`;
         }
 
-        return 'Active';
-    }, [data]);
+        return isActive ? 'Active' : 'Offline';
+    }, [data, isActive]);
 
     return (
         <>
@@ -87,7 +92,11 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ isOpen, onClose, data }) 
                                             <div className="relative mt-6 flex-1 px-4 sm:px-6">
                                                 <div className="flex flex-col items-center">
                                                     <div className="mb-2">
-                                                        <Avatar user={otherUser} />
+                                                        {data.isGroup ? (
+                                                            <AvatarGroup users={data.users} />
+                                                        ) : (
+                                                            <Avatar user={otherUser} />
+                                                        )}
                                                     </div>
                                                     <div>{title}</div>
                                                     <div className="text-sm text-gray-500">{statusText}</div>
